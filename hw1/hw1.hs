@@ -11,7 +11,13 @@ toDigitsRev n = reverseList (toDigits n)
 
 reverseList :: [a] -> [a]
 reverseList [] = []
-reverseList [x] = [x]
 reverseList (x:xs) = concat [reverseList(xs), [x]]
 
+-- Exercise 2:
+
+doubleEveryOther :: [Integer] -> [Integer]
+doubleEveryOther [] = []
+doubleEveryOther [n] = [n]
+-- doubleEveryOther [n,m] = [(2*n),m]
+doubleEveryOther (n:m:xs) = n:m*2:doubleEveryOther(xs)
 
