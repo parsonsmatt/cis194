@@ -31,3 +31,16 @@ sumDigits (x:xs) = sumDigits(toDigits x) + sumDigits xs
 
 -- Exercise 4:
 
+validate :: Integer -> Bool
+validate n =
+	sumDigits (doubleEveryOther (toDigits (n))) `mod` 10 == 0	
+
+-- Towers of Hanoi!
+
+-- Exercise 5:
+
+type Peg = String
+type Move = (Peg, Peg)
+hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
+hanoi 0 _ _ _ = []
+hanoi n a b c = hanoi (n-1) a c b ++ [(a,b)] ++ hanoi (n-1) c b a
