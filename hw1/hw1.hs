@@ -24,6 +24,10 @@ doubleEveryOther (n:m:xs) = n:m*2:doubleEveryOther(xs)
 
 sumDigits :: [Integer] -> Integer
 sumDigits [] = 0
-sumDigits [n] = n
-sumDigits (x:xs) = x + sumDigits xs
+sumDigits [n] 
+	| n <= 9    = n
+	| otherwise = sumDigits(toDigits n)  
+sumDigits (x:xs) = sumDigits(toDigits x) + sumDigits xs
+
+-- Exercise 4:
 
