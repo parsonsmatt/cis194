@@ -18,6 +18,12 @@ reverseList (x:xs) = concat [reverseList(xs), [x]]
 doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther [] = []
 doubleEveryOther [n] = [n]
--- doubleEveryOther [n,m] = [(2*n),m]
 doubleEveryOther (n:m:xs) = n:m*2:doubleEveryOther(xs)
+
+-- Exercise 3:
+
+sumDigits :: [Integer] -> Integer
+sumDigits [] = 0
+sumDigits [n] = n
+sumDigits (x:xs) = x + sumDigits xs
 
