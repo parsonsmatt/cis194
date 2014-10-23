@@ -6,10 +6,12 @@ toDigits n
 	| n <= 9    = [n]
 	| otherwise = concat [toDigits(div n 10), [mod n 10]] 
 
--- toDigitsRev :: Integer -> [Integer]
--- toDigitsRev n
+toDigitsRev :: Integer -> [Integer]
+toDigitsRev n = reverseList (toDigits n)
 
 reverseList :: [a] -> [a]
 reverseList [] = []
 reverseList [x] = [x]
 reverseList (x:xs) = concat [reverseList(xs), [x]]
+
+
