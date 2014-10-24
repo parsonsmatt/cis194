@@ -13,8 +13,8 @@ parse str = map (parseMessage) (lines(str))
 
 parseMessage :: String -> LogMessage
 parseMessage str = LogMessage (getMessageType str)
-								              (getTimeStamp str)
-									            (getString str)
+	                      (getTimeStamp str)
+	                      (getString str)
 
 getMessageType :: String -> MessageType
 getMessageType str
@@ -37,7 +37,7 @@ isError msg
 	| msg == Info = False
 	| msg == Warning = False
 	| head (words (show msg)) == "Error" = True
-  | otherwise = False
+	| otherwise = False
 
 getErrorLevel :: String -> Int
 getErrorLevel str = read (head (drop 1 (words str)))
