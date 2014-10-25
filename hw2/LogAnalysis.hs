@@ -42,3 +42,5 @@ isError msg
 getErrorLevel :: String -> Int
 getErrorLevel str = read (head (drop 1 (words str)))
 
+-- Exercise 2:
+insert :: LogMessage -> MessageTree -> MessageTree
