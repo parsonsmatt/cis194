@@ -29,8 +29,8 @@ getTimeStamp str
 
 getString :: String -> String
 getString str
-	| isError(getMessageType str) = "TODO: Unstub error."
-	| otherwise = "TODO: Unstub I/W"
+	| isError(getMessageType str) = unwords (drop 3 (words str))
+	| otherwise = unwords (drop 2 (words str))
 
 isError :: MessageType -> Bool
 isError msg
