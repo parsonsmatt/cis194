@@ -13,8 +13,8 @@ parse str = map (parseMessage) (lines(str))
 
 parseMessage :: String -> LogMessage
 parseMessage str = LogMessage (getMessageType str)
-	                      (getTimeStamp str)
-	                      (getString str)
+                              (getTimeStamp str)
+                              (getString str)
 
 getMessageType :: String -> MessageType
 getMessageType str
