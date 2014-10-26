@@ -31,8 +31,8 @@ getTimeStamp str
 
 getRest :: String -> String
 getRest str  
-	| isError (getMessageType str) = head (drop 3 (words str))
-	| otherwise                    = head (drop 2 (words str))
+	| isError (getMessageType str) = unwords (drop 3 (words str))
+	| otherwise                    = unwords (drop 2 (words str))
 
 isError :: MessageType -> Bool
 isError (Error _) = True
@@ -68,3 +68,26 @@ inOrder (Node ltree m Leaf) = inOrder ltree ++ [m]
 inOrder (Node ltree m rtree) = inOrder ltree ++ [m] ++ inOrder rtree
 
 -- Exercise #5:
+
+-- List of Strings corresponding to LogMessages of type Error x where x > 50
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong [] = []
+whatWentWrong [msg] 
+	| passTest msg = [str]
+	| otherwise    = []
+	where str = getString msg
+whatWentWrong (msg:msgs)
+	| passTest msg = [str] ++ whatWentWrong msgs
+	| otherwise    = [] ++ whatWentWrong msgs
+	where str = getString msg
+
+passTest :: LogMessage -> Bool
+passTest (LogMessage (Error x) _ _)
+	| x > 50    = True
+	| otherwise = False
+passTest _ = False
+
+getString :: LogMessage -> String
+getString (LogMessage _ _ str) = str
+
+
