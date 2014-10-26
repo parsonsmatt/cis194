@@ -89,5 +89,3 @@ passTest _ = False
 
 getString :: LogMessage -> String
 getString (LogMessage _ _ str) = str
-
-
