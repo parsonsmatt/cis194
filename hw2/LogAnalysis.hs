@@ -10,7 +10,6 @@ import Log
 parse :: String -> [LogMessage]
 parse str = map (parseMessage) (lines(str))
 	
-
 parseMessage :: String -> LogMessage
 parseMessage str = LogMessage msgType ts rest
                    where msgType = getMessageType str
