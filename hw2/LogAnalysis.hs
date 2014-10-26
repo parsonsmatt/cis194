@@ -60,6 +60,11 @@ build (m:ms) = insert m (build ms)
 
 -- Exercise #4:
 
--- inOrder :: MessageTree -> [LogMessage]
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node Leaf m Leaf) = [m]
+inOrder (Node ltree m Leaf) = inOrder ltree ++ [m]
+inOrder (Node ltree m rtree) = inOrder ltree ++ [m] ++ inOrder rtree
+inOrder (Node Leaf m rtree) = [m] ++ inOrder rtree
 
 
