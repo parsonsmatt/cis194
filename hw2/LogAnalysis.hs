@@ -42,3 +42,24 @@ getErrorLevel :: String -> Int
 getErrorLevel = read . head . (drop 1) . words
 
 -- Exercise #2: 
+
+insert :: LogMessage -> MessageTree -> MessageTree
+insert (Unknown _) tree = tree
+insert m Leaf = Node Leaf m Leaf
+insert msg@(LogMessage _ ts _) tree@(Node left currMsg@(LogMessage _ currTs _) right)
+	| ts > currTs = Node left currMsg (insert msg right)
+	| ts < currTs = Node (insert msg left) currMsg right
+	| otherwise   = tree
+
+-- Exercise #3:
+
+build :: [LogMessage] -> MessageTree
+build [] = Leaf
+build [msg] = insert msg Leaf
+build (m:ms) = insert m (build ms) 
+
+-- Exercise #4:
+
+-- inOrder :: MessageTree -> [LogMessage]
+
+
