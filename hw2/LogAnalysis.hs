@@ -26,7 +26,7 @@ getMessageType str
 getTimeStamp :: String -> TimeStamp
 getTimeStamp str
 	| isError (getMessageType str) = read (head (drop 2 (words(str)))) :: Int
-	| otherwise = read (head (drop 1 (words (str)))) :: Int
+	| otherwise = read (head (tail (words (str)))) :: Int
 
 getRest :: String -> String
 getRest str  
@@ -38,7 +38,7 @@ isError (Error _) = True
 isError _         = False
 
 getErrorLevel :: String -> Int
-getErrorLevel = read . head . (drop 1) . words
+getErrorLevel = read . head . tail . words
 
 -- Exercise #2: 
 
@@ -61,7 +61,7 @@ build (m:ms) = insert m (build ms)
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
-inOrder Node ltree m rtree = inOrder ltree ++ [m] ++ inOrder rtree
+inOrder (Node ltree m rtree) = inOrder ltree ++ [m] ++ inOrder rtree
 
 -- Exercise #5:
 
