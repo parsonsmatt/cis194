@@ -18,16 +18,16 @@ deIndex x = map snd x
 flatten :: [b] -> [[(Int, (Int, b))]]
 flatten xs = map dropIndex $ buildList xs
 
---buildList :: [(Int, [(Int, a)])]
+buildList :: [a] -> [(Int, [(Int, a)])]
 buildList = withIndex . expandList . withIndex
 
---expandList :: [a] -> [[a]]
+expandList :: [a] -> [[a]]
 expandList xs = map (\x -> xs) xs
 
---withIndex :: [a] -> [(Int,a)]
+withIndex :: [a] -> [(Int,a)]
 withIndex = zip [1..]
 
---dropIndex :: (Int,[a]) -> [(Int,a)]
+dropIndex :: (Int,[a]) -> [(Int,a)]
 dropIndex (n,xs) = filter (\(x,_) -> x `mod` n == 0) (withIndex xs)
 
 -- Exercise 2: Local maxima
