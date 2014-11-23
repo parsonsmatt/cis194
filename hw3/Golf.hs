@@ -3,14 +3,9 @@
 module Golf where 
 
 -- Exercise 1: Hopscotch
-
--- The arrays in the produced array consist of the original array, only 
--- consisting of elements whose index is divisible by the number of the 
--- array.
-
 skips :: [a] -> [[a]]
 skips [] = []
-skips xs = map deIndex ((map deIndex) (flatten xs))
+skips xs = map deIndex (map (deIndex) (flatten xs))
 
 deIndex :: (Integral a) => [(a,b)] -> [b]
 deIndex x = map snd x
@@ -18,17 +13,23 @@ deIndex x = map snd x
 flatten :: [b] -> [[(Int, (Int, b))]]
 flatten xs = map dropIndex $ buildList xs
 
-buildList :: [a] -> [(Int, [(Int, a)])]
-buildList = withIndex . expandList . withIndex
+-- Drops elements in the list if they're divisible by the number.
+dropIndex :: (Int,[a]) -> [(Int,a)]
+dropIndex (n,xs) = filter (\(x,_) -> x `mod` n == 0) (index xs)
 
+-- Takes a list, indexes it, expands it into a list of lists, and
+-- indexes the top level list.
+buildList :: [a] -> [(Int, [(Int, a)])]
+buildList = index . expandList . index
+
+-- Takes a list and converts it into a list of lists, each of which
+-- is the original list.
 expandList :: [a] -> [[a]]
 expandList xs = map (\x -> xs) xs
 
-withIndex :: [a] -> [(Int,a)]
-withIndex = zip [1..]
-
-dropIndex :: (Int,[a]) -> [(Int,a)]
-dropIndex (n,xs) = filter (\(x,_) -> x `mod` n == 0) (withIndex xs)
+-- Takes a list and indexes the items.
+index :: [a] -> [(Int,a)]
+index = zip [1..]
 
 -- Exercise 2: Local maxima
 
