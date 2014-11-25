@@ -34,8 +34,11 @@ index = zip [1..]
 -- Exercise 2: Local maxima
 
 localMaxima :: [Integer] -> [Integer]
-localMaxima [] = []
-
+localMaxima []     = []
+localMaxima [x]    = []
+localMaxima (x:xs) = if (x > head xs) 
+                     then x : (localMaxima xs)
+                     else localMaxima xs
 
 -- Exercise 3: Histogram
 
