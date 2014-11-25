@@ -15,3 +15,9 @@ main = do
 		then putStrLn "ABCD Passed!"
 		else putStrLn "ABCD Failed!"
 
+    putStrLn "Testing 'localMaxina'..."
+    putStrLn ("Actual:\t" ++ show (localMaxima [2,9,5,6,1]))
+    putStrLn ("Expected: [9,6]")
+    putStrLn ("Actual:\t" ++ show (localMaxima [1,2,3,4,5]))
+    putStrLn ("Expected: []")
+
