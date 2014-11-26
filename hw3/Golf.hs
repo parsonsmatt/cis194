@@ -45,7 +45,25 @@ localMaxima (x:xs) = if (x > head xs)
 -- Exercise 3: Histogram
 
 histogram :: [Integer] -> String
-histogram [] = ""
+histogram [] = "" 
+histogram xs = foldr1 (\str acc -> acc ++ "\n" ++ str)
+                $ removeSpaces 
+                $ transpose $ composeStrings $ completeListPairs xs
+
+-- Remove all-space strings:
+removeSpaces :: [String] -> [String]
+removeSpaces = filter (any (\char -> char /= ' '))
+
+-- Compose total string set:
+composeStrings :: [(Integer, Integer)] -> [String]
+composeStrings xs = map buildString xs
+
+-- Construct a single string:
+buildString :: (Integer, Integer) -> String
+buildString (x,y) = (show x) ++ 
+                    "=" ++ 
+                    genericReplicate y '*' ++
+                    genericReplicate (9-y) ' '
 
 -- Construct the list of numbers and occurences
 completeListPairs xs = sort $ union (missingNum xs) (numsAndOccurences xs)
