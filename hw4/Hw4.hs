@@ -11,7 +11,7 @@ fun1 (x:xs)
     | otherwise = fun1 xs
 
 fun1' :: [Integer] -> Integer
-fun1' =  product . filter (\x -> even x) . map (\x -> x-2)
+fun1' =  product . filter even . map ((-) 2)
 
 fun2 :: Integer -> Integer
 fun2 1 = 0
@@ -20,3 +20,4 @@ fun2 n | even n    = n + fun2 (n `div` 2)
 
 fun2' :: Integer -> Integer
 fun2' _ = 0
+
