@@ -1,5 +1,5 @@
 #!/bin/sh
 
-ghc -o hw4 Hw4.hs
-./hw4
+ghc -o hw4Test Hw4Test.hs 
+./hw4Test
 

@@ -1,5 +1,7 @@
 -- Homework 4
 
+module Hw4 where
+
 -- Exercise 1:
 
 fun1 :: [Integer] -> Integer
@@ -9,7 +11,7 @@ fun1 (x:xs)
     | otherwise = fun1 xs
 
 fun1' :: [Integer] -> Integer
-
+fun1' =  product . filter (\x -> even x) . map (\x -> x-2)
 
 fun2 :: Integer -> Integer
 fun2 1 = 0
@@ -17,4 +19,4 @@ fun2 n | even n    = n + fun2 (n `div` 2)
        | otherwise = fun2 (3 * n + 1)
 
 fun2' :: Integer -> Integer
-
+fun2' _ = 0
