@@ -83,5 +83,3 @@ passTest (LogMessage (Error x) _ _)
 	| otherwise = False
 passTest _ = False
 
-getString :: LogMessage -> String
-getString (LogMessage _ _ str) = str
