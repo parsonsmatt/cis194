@@ -18,7 +18,7 @@ fun1'' = foldr f 1
 
 fun1''' :: [Integer] -> Integer
 fun1''' = foldr f 1 . filter even
-          where f x = (*) (x-2) 
+          where f = (*) . (subtract 2) 
 
 
 fun2 :: Integer -> Integer
