@@ -26,11 +26,11 @@ fun2 1 = 0
 fun2 n | even n    = n + fun2 (n `div` 2)
        | otherwise =     fun2 (3 * n + 1)
 
--- 1 -> 0
--- 2 -> 2 + fun2 (n/2) -> 2 + 0
--- 3 -> fun2(3*3+1=10) -> 10 + fun2(5) -> fun(3*5+1=16) -> 16 + fun2(8) -> 8 + fun2(4) -> 4 + fun2(2) -> 2
-
+-- this is not a better implementation
 fun2' :: Integer -> Integer
-fun2' n = 1
+fun2' n = foldr f 0 list
+          where f x  = (+) (if even x then x else 0)
+                list = takeWhile (>1) $ iterate g n
+                g y  = if even y then flip div 2 y else 1 + (*) 3 y
 
 
