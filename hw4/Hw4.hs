@@ -18,7 +18,7 @@ fun1'' = foldr f 1
 
 fun1''' :: [Integer] -> Integer
 fun1''' = foldr f 1 . filter even
-          where f = (*) . (subtract 2) 
+          where f = (*) . subtract 2 
 
 
 fun2 :: Integer -> Integer
@@ -35,4 +35,30 @@ fun2' n = foldr f 0 list
                     | otherwise = 1 + (*) 3 y
                 list = takeWhile (>1) $ iterate g n
 
+-- Exercise 2:
 
+data Tree a = Leaf
+            | Node Integer (Tree a) a (Tree a)
+            deriving (Eq, Show)
+
+foldTree :: [a] -> Tree a
+foldTree xs = foldr insert Leaf xs
+
+insert :: a -> Tree a -> Tree a
+insert x Leaf = Node 0 Leaf x Leaf
+insert x (Node h l n r)
+    | hl < hr   = Node h (insert x l) n r
+    | hl > hr   = Node h l n ixr
+    | otherwise = Node (h+1) l n ixr
+  where hl  = height l
+        hr  = height r
+        ixr = insert x r
+        h   = height ixr
+
+height :: Tree a -> Integer
+height Leaf = -1
+height (Node _ l _ r)        = 1 + max (height l) (height r)
+
+nodes :: (Integral b) => Tree a -> b
+nodes Leaf = 0
+nodes (Node _ l _ r) = 1 + (nodes l + nodes r)
