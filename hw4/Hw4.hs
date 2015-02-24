@@ -55,11 +55,11 @@ insert x (Node h l n r)
         ixr = insert x r
         h   = height ixr
 
-complete :: Tree a -> Bool
-complete Leaf = True
-complete (Node _ Leaf _ (Node _ _ _ _)) = False
-complete (Node _ (Node _ _ _ _) _ Leaf) = False
-complete (Node _ r _ l) = complete r && complete l
+full :: Tree a -> Bool
+full Leaf = True
+full (Node _ Leaf _ (Node _ _ _ _)) = False
+full (Node _ (Node _ _ _ _) _ Leaf) = False
+full (Node _ r _ l) = full r && full l
 
 
 height :: (Integral b) => Tree a -> b
