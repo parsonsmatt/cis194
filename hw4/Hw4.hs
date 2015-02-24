@@ -41,22 +41,17 @@ data Tree a = Leaf
             | Node Integer (Tree a) a (Tree a)
             deriving (Eq, Show)
 
-foldTree :: [a] -> Tree a
+foldTree :: (Show a) => [a] -> Tree a
 foldTree xs = foldr insert Leaf xs
 
 insert :: a -> Tree a -> Tree a
 insert x Leaf = Node 0 Leaf x Leaf
-insert x (Node h l n r)
-    | hl < hr   = Node h (insert x l) n r
-    | hl > hr   = Node h l n ixr
-    | otherwise = Node (h+1) l n ixr
-  where hl  = height l
-        hr  = height r
-        ixr = insert x r
-        h   = height ixr
+insert x (Node h Leaf n Leaf) = Node (h+1) (insert x Leaf) n Leaf
+insert x (Node h r n Leaf ) = Node (h) r n (insert x Leaf)
 
 full :: Tree a -> Bool
-full Leaf = True
+full Leaf = False
+full (Node _ Leaf _ Leaf) = True
 full (Node _ Leaf _ (Node _ _ _ _)) = False
 full (Node _ (Node _ _ _ _) _ Leaf) = False
 full (Node _ r _ l) = full r && full l
