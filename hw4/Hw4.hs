@@ -1,5 +1,6 @@
 module Hw4 where
 import Data.List hiding (insert)
+import Data.Functor
 
 -- Exercise 1:
 
@@ -81,7 +82,7 @@ map' f = foldr (\x acc -> f x : acc) []
 -- Exercise 4:
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = map ((+) 1 . (*) 2 ) $ [1..n] \\ exclude 
+sieveSundaram n = map ((+1) <$> (*2)) $ [1..n] \\ exclude 
                 where exclude = map f $ filter p $ cartProd [1..n] [1..n]
                       p c@(i,j) = i <= j && f c <= n  
                       f (i,j) = i + j + (2 * i * j)
