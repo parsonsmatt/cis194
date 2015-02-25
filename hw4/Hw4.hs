@@ -82,10 +82,13 @@ map' f = foldr (\x acc -> f x : acc) []
 -- Exercise 4:
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = map ((+1) <$> (*2)) $ [1..n] \\ exclude 
-                where exclude = map f $ filter p $ cartProd [1..n] [1..n]
-                      p c@(i,j) = i <= j && f c <= n  
-                      f (i,j) = i + j + (2 * i * j)
+sieveSundaram n = map ((+1) <$> (*2)) $ upToN \\ exclude
+                where exclude = foldl f [] $ cartProd upToN upToN
+                      f acc (i,j) = if (i <= j && (2 * i * j) <= n) 
+                                         then acc ++ [(2 * i * j)]
+                                         else acc
+                      g (i,j) = i + j + (2 * i * j)
+                      upToN = [1..n]
 
 cartProd :: [a] -> [b] -> [(a, b)]
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
