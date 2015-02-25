@@ -44,6 +44,7 @@ data Tree a = Leaf
 foldTree :: (Show a) => [a] -> Tree a
 foldTree xs = foldr insert Leaf xs
 
+-- Skipping this...
 insert :: a -> Tree a -> Tree a
 insert x Leaf = Node 0 Leaf x Leaf
 insert x (Node h Leaf n Leaf) = Node (h+1) (insert x Leaf) n Leaf
@@ -64,3 +65,9 @@ height (Node _ l _ r) = 1 + max (height l) (height r)
 nodes :: (Integral b) => Tree a -> b
 nodes Leaf = 0
 nodes (Node _ l _ r) = 1 + (nodes l + nodes r)
+nodes (Node _ l _ r) = foldl (+) 
+
+-- Exercise 3:
+
+xor :: [Bool] -> Bool
+xor = foldl1 (\acc x -> ) xs
