@@ -43,19 +43,19 @@ data Tree a = Leaf
             deriving (Eq, Show)
 
 foldTree :: (Show a) => [a] -> Tree a
-foldTree xs = foldr insert Leaf xs
+foldTree = foldr insert Leaf
 
 -- Skipping this...
 insert :: a -> Tree a -> Tree a
 insert x Leaf = Node 0 Leaf x Leaf
 insert x (Node h Leaf n Leaf) = Node (h+1) (insert x Leaf) n Leaf
-insert x (Node h r n Leaf ) = Node (h) r n (insert x Leaf)
+insert x (Node h r n Leaf ) = Node h r n (insert x Leaf)
 
 full :: Tree a -> Bool
 full Leaf = False
 full (Node _ Leaf _ Leaf) = True
-full (Node _ Leaf _ (Node _ _ _ _)) = False
-full (Node _ (Node _ _ _ _) _ Leaf) = False
+full (Node _ Leaf _ Node{}) = False
+full (Node _ Node{} _ Leaf) = False
 full (Node _ r _ l) = full r && full l
 
 
@@ -74,3 +74,28 @@ xor = foldl1' (/=)
 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr (\x acc -> f x : acc) []
+
+-- myFoldl :: (a -> b -> a) -> a [b] -> a
+-- myFoldl f base xs = foldr
+
+-- Exercise 4:
+
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = map ((+) 1 . (*) 2 ) $ [1..n] \\ exclude (ijs n)
+                where exclude = map (uncurry f)
+                      ijs n = filter p $ cartProd [1..n] [1..n]
+                      p (i,j) = i <= j && f i j <= n  
+                      f i j = i + j + (2 * i * j)
+
+cartProd :: [a] -> [b] -> [(a, b)]
+cartProd xs ys = [(x,y) | x <- xs, y <- ys]
+
+{---- 
+- Start with a list of integers from 1 to n. From this list, remove all
+- numbers of the form i + j + 2ij where:
+- * i, j in N, 1 <= i <= j
+- * i + j + 2ij <= n 
+- The remaining numbers are doubled and incremented by one, giving a list
+- of the odd prime numbers below 2n + 2.
+-}
+
