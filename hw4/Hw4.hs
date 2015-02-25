@@ -1,4 +1,5 @@
 module Hw4 where
+import Data.List hiding (insert)
 
 -- Exercise 1:
 
@@ -65,9 +66,8 @@ height (Node _ l _ r) = 1 + max (height l) (height r)
 nodes :: (Integral b) => Tree a -> b
 nodes Leaf = 0
 nodes (Node _ l _ r) = 1 + (nodes l + nodes r)
-nodes (Node _ l _ r) = foldl (+) 
 
 -- Exercise 3:
 
 xor :: [Bool] -> Bool
-xor = foldl1 (\acc x -> ) xs
+xor = foldl1' (/=)
