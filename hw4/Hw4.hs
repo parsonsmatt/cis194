@@ -71,3 +71,6 @@ nodes (Node _ l _ r) = 1 + (nodes l + nodes r)
 
 xor :: [Bool] -> Bool
 xor = foldl1' (/=)
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr (\x acc -> f x : acc) []
