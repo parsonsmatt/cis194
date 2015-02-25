@@ -33,7 +33,7 @@ fun2' :: Integer -> Integer
 fun2' n = foldr f 0 list
           where f x | even x    = (+) x 
                     | otherwise = (+) 0
-                g y | even y    = flip div 2 y 
+                g y | even y    = y `div` 2 
                     | otherwise = 1 + (*) 3 y
                 list = takeWhile (>1) $ iterate g n
 
@@ -82,12 +82,13 @@ map' f = foldr (\x acc -> f x : acc) []
 -- Exercise 4:
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = map ((+1) <$> (*2)) $ upToN \\ exclude
-                where exclude = foldl f [] $ cartProd upToN upToN
-                      f acc (i,j) = if (i <= j && (2 * i * j) <= n) 
-                                         then acc ++ [(2 * i * j)]
-                                         else acc
-                      g (i,j) = i + j + (2 * i * j)
+sieveSundaram n = map ((+1) <$> (*2)) $ list
+                where list = upToN \\ exclude
+                      exclude = foldl f [] $ cartProd upToN upToN
+                      f acc (i,j) = if i <= j && g i j <= n 
+                                       then acc ++ [g i j]
+                                       else acc
+                      g i j = i + j + (2 * i * j)
                       upToN = [1..n]
 
 cartProd :: [a] -> [b] -> [(a, b)]
