@@ -1,6 +1,6 @@
 {- LANGUAGE TypeSynonymInstances -}
 module Calc where
-import qualified StackVM as S
+import           StackVM 
 import           Data.Functor ((<$>))
 import qualified ExprT as E
 import           Parser
