@@ -25,4 +25,13 @@ instance Expr ExprT where
     mul a b = Mul a b
 
 -- Exercise #4:
+instance Expr Integer where
+    lit a   = a
+    add a b = a + b
+    mul a b = a * b
 
+instance Expr Bool where
+    lit a | a <= 0 = False
+          | a >  0 = True
+    add a b = a || b
+    mul a b = a && b
