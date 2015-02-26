@@ -1,4 +1,4 @@
-{- LANGUAGE TypeSynonymInstances -}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 module Calc where
 import           StackVM 
 import           Data.Functor ((<$>))
@@ -6,7 +6,7 @@ import qualified ExprT as E
 import           Parser
 
 -- Exercise #1:
-eval :: E.E.ExprT -> Integer
+eval :: E.ExprT -> Integer
 eval (E.Lit a) = a
 eval (E.Add a b) = eval a + eval b
 eval (E.Mul a b) = eval a * eval b
@@ -58,10 +58,16 @@ instance Num Mod7 where
     abs (Mod7 a)    = Mod7 (abs a)
 
 instance Expr Mod7 where
-    lit a = fromInteger a :: Mod7
+    lit a   = fromInteger a :: Mod7
     add a b = a + b
     mul a b = a * b
 
 -- Exercise #5:
 
 instance Expr Program where
+   lit a   = [PushI a]
+   add a b = a ++ b ++ [Add]
+   mul a b = a ++ b ++ [Mul]
+
+compile :: String -> Maybe Program
+compile str = parseExp lit add mul str
