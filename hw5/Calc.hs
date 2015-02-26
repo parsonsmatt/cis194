@@ -43,3 +43,19 @@ instance Expr MinMax where
     lit a = MinMax a
     add a b = max a b
     mul a b = min a b
+
+data Mod7 = Mod7 Integer
+    deriving (Show, Eq, Ord)
+
+instance Num Mod7 where
+    fromInteger a   = Mod7 (a `mod` 7)
+    Mod7 a + Mod7 b = fromInteger (a + b)
+    Mod7 a * Mod7 b = fromInteger (a * b)
+    Mod7 a - Mod7 b = fromInteger (a - b)
+    signum (Mod7 a) = Mod7 (signum a)
+    abs (Mod7 a)    = Mod7 (abs a)
+
+instance Expr Mod7 where
+    lit a = fromInteger a :: Mod7
+    add a b = a + b
+    mul a b = a * b
