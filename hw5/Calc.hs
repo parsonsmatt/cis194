@@ -35,3 +35,11 @@ instance Expr Bool where
           | a >  0 = True
     add a b = a || b
     mul a b = a && b
+
+data MinMax = MinMax Integer
+    deriving (Show, Eq, Ord)
+
+instance Expr MinMax where
+    lit a = MinMax a
+    add a b = max a b
+    mul a b = min a b
