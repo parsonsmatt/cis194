@@ -1,17 +1,19 @@
+{- LANGUAGE TypeSynonymInstances -}
 module Calc where
-import ExprT
-import Parser
-import Data.Functor
+import qualified StackVM as S
+import           Data.Functor ((<$>))
+import qualified ExprT as E
+import           Parser
 
 -- Exercise #1:
-eval :: ExprT -> Integer
-eval (Lit a) = a
-eval (Add a b) = eval a + eval b
-eval (Mul a b) = eval a * eval b
+eval :: E.E.ExprT -> Integer
+eval (E.Lit a) = a
+eval (E.Add a b) = eval a + eval b
+eval (E.Mul a b) = eval a * eval b
 
 -- Exercise #2:
 evalStr :: String -> Maybe Integer
-evalStr str = eval <$> parseExp Lit Add Mul str
+evalStr str = eval <$> parseExp E.Lit E.Add E.Mul str
 
 -- Exercise #3:
 class Expr a where
@@ -19,10 +21,10 @@ class Expr a where
     add :: a -> a -> a
     mul :: a -> a -> a
 
-instance Expr ExprT where
-    lit a   = Lit a
-    add a b = Add a b
-    mul a b = Mul a b
+instance Expr E.ExprT where
+    lit a   = E.Lit a
+    add a b = E.Add a b
+    mul a b = E.Mul a b
 
 -- Exercise #4:
 instance Expr Integer where
@@ -59,3 +61,7 @@ instance Expr Mod7 where
     lit a = fromInteger a :: Mod7
     add a b = a + b
     mul a b = a * b
+
+-- Exercise #5:
+
+instance Expr Program where
