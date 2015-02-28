@@ -16,14 +16,14 @@ fibs1 = map fib [1..]
 -- Exercise #2:
 
 fibs2 :: [Integer]
-fibs2 = 0 : 1 : (map (uncurry (+)) $ zip fibs2 $ tail fibs2)
+fibs2 = 0 : 1 : zipWith (+) fibs2 tail fibs2
 
 -- Exercise #3:
 
 data Stream a = Elem a (Stream a)
 
 streamToList :: Stream a -> [a]
-streamToList (Elem x b) = [x] ++ streamToList b 
+streamToList (Elem x b) = x : streamToList b 
 
 instance Show a => Show (Stream a) where
     show = show . take 20 . streamToList
@@ -41,3 +41,14 @@ streamMap = fmap
 
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed f a = Elem a (streamFromSeed f (f a))
+
+-- Exercise #5:
+
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0
+
+-- nth element in the stream (assuming first element n=1) is the largest power
+-- of 2 which evenly divides n
+ruler :: Stream Integer
+
+interleaveStreams :: Stream a -> Stream a -> Stream a
