@@ -16,7 +16,7 @@ fibs1 = map fib [1..]
 -- Exercise #2:
 
 fibs2 :: [Integer]
-fibs2 = 0 : 1 : zipWith (+) (fibs2) (tail fibs2)
+fibs2 = 0 : 1 : zipWith (+) fibs2 (tail fibs2)
 
 -- Exercise #3:
 
@@ -47,9 +47,6 @@ streamFromSeed f a = Elem a (streamFromSeed f (f a))
 nats :: Stream Integer
 nats = streamFromSeed (+1) 0
 
-evens :: Stream Integer
-evens = streamFromSeed (+2) 0
-
 -- nth element in the stream (assuming first element n=1) is the largest power
 -- of 2 which evenly divides n: n=8 => 3 (2^3), n=6 => 1 (2^1)
 -- #1: 0 will be every other element. Removing 0s gives pattern:
@@ -67,18 +64,20 @@ evens = streamFromSeed (+2) 0
 -- Ah hah! So the ruler stream is just a series of streams that are interleaved
 -- with each other. 
 --      ruler = interleave (streamRepeat 0) 
---                         (interleave (streamRepeat 1) 
---                                     (interleave (streamRepeat 2)
---                                                 (interleave (streamRepeat 3)
---                                                             (interleave (streamRepeat 4)
---                                                                         ...
---
---
+--              (interleave (streamRepeat 1) 
+--              (interleave (streamRepeat 2)
+--              (interleave (streamRepeat 3)
+--              (interleave (streamRepeat 4)
+--              ...))))...
+
 ruler :: Stream Integer
-ruler = nats
+ruler = go 0
+    where go n = Elem n (interleaveStreams (go (n+1)) (streamRepeat n))
 
 interleaveStreams :: Stream a -> Stream a -> Stream a
 interleaveStreams (Elem a as) (Elem b bs) = Elem a (Elem b (interleaveStreams as bs))
 
-zipStreams :: Stream a -> Stream b -> Stream (a,b)
-zipStreams (Elem a as) (Elem b bs) = Elem (a,b) (zipStreams as bs)
+-- Exercise 6:
+
+x :: Stream Integer
+x = Elem 0 (Elem 1 (streamRepeat 0))
