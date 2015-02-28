@@ -18,3 +18,15 @@ fibs1 = map fib [1..]
 fibs2 :: [Integer]
 fibs2 = 0 : 1 : (map (uncurry (+)) $ zip fibs2 $ tail fibs2)
 
+-- Exercise #3:
+
+data Stream a = Elem a (Stream a)
+
+streamToList :: Stream a -> [a]
+streamToList (Elem x b) = [x] ++ streamToList b 
+
+instance Show a => Show (Stream a) where
+    show = show . take 20 . streamToList
+
+
+
