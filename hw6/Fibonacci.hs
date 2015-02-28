@@ -28,5 +28,13 @@ streamToList (Elem x b) = [x] ++ streamToList b
 instance Show a => Show (Stream a) where
     show = show . take 20 . streamToList
 
+-- Exercise #4:
 
+streamRepeat :: a -> Stream a
+streamRepeat x = Elem x (streamRepeat x)
 
+streamMap :: (a -> b) -> Stream a -> Stream b
+streamMap f (Elem a as) = Elem (f a) (streamMap f as)
+
+streamFromSeed :: (a -> a) -> a -> Stream a
+streamFromSeed f a = Elem (f a) (streamFromSeed f (f a))
