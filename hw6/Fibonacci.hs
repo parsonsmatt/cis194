@@ -30,11 +30,14 @@ instance Show a => Show (Stream a) where
 
 -- Exercise #4:
 
+instance Functor Stream where
+    fmap f (Elem a as) = Elem (f a) (fmap f as)
+
 streamRepeat :: a -> Stream a
 streamRepeat x = Elem x (streamRepeat x)
 
 streamMap :: (a -> b) -> Stream a -> Stream b
-streamMap f (Elem a as) = Elem (f a) (streamMap f as)
+streamMap = fmap
 
 streamFromSeed :: (a -> a) -> a -> Stream a
-streamFromSeed f a = Elem (f a) (streamFromSeed f (f a))
+streamFromSeed f a = Elem a (streamFromSeed f (f a))
