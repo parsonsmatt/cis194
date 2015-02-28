@@ -52,6 +52,28 @@ evens = streamFromSeed (+2) 0
 
 -- nth element in the stream (assuming first element n=1) is the largest power
 -- of 2 which evenly divides n: n=8 => 3 (2^3), n=6 => 1 (2^1)
+-- #1: 0 will be every other element. Removing 0s gives pattern:
+--      2, 4, 6, 8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40
+--      1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3
+-- Every other is 1, so we can further reduce:
+--      #:  4, 8,12,16,20,24,28,32,36,40,44,48,52,
+--      2s: 2, 3, 2, 4, 2, 3, 2, 5, 2, 3, 2, 4, 2,
+-- Every other is 2, so we can reduce:
+--      #:  8, 16, 24, 32, 40, 48, 56, 64, 72, 80
+--      2s: 3,  4,  3,  5,  3,  4,  3,  6,  3,  4
+-- Every other is 3, so we can reduce:
+--      #:  16, 32, 48, 64, 80
+--      2s:  4,  5,  4,  6,  4
+-- Ah hah! So the ruler stream is just a series of streams that are interleaved
+-- with each other. 
+--      ruler = interleave (streamRepeat 0) 
+--                         (interleave (streamRepeat 1) 
+--                                     (interleave (streamRepeat 2)
+--                                                 (interleave (streamRepeat 3)
+--                                                             (interleave (streamRepeat 4)
+--                                                                         ...
+--
+--
 ruler :: Stream Integer
 ruler = nats
 
