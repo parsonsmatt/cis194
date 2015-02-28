@@ -1,5 +1,6 @@
 module Fibonacci where
 import Data.Array (array)
+import Data.List (genericIndex)
 
 -- Exercise #1:
 
@@ -14,3 +15,6 @@ fibs1 = map fib [1..]
 
 -- Exercise #2:
 
+fibs2 :: [Integer]
+fibs2 = listOFibs
+    where listOFibs = [ | ]
