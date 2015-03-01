@@ -90,4 +90,25 @@ instance Num (Stream Integer) where
     (*) (Elem a a') bs@(Elem b b') = Elem (a*b) ((fromInteger a) * b' + a' * bs)
 
 instance Fractional (Stream Integer) where
-    (/) (Elem a a') (Elem b b') = Elem (a `div` b) (...)
+    (/) (Elem a a') (Elem b b') = q
+                              where q = Elem (a `div` b) ((a' - q * b') / (fromInteger b))
+
+fibs3 :: Stream Integer
+fibs3 = (x) / (1 - x - x^2)
+
+-- Exercise 7:
+
+data Matrix = Matrix { tl :: Integer
+                     , tr :: Integer
+                     , bl :: Integer
+                     , br :: Integer}
+    deriving Show
+
+instance Num Matrix where
+    (Matrix a b c d) * (Matrix a' b' c' d') = Matrix (a * a' + b * c')
+                                                     (a * b' + b * d')
+                                                     (c * a' + d * c')
+                                                     (c * b' + d * d')
+
+fib4 :: Integer -> Integer
+fib4 = tl . (^) (Matrix 1 1 1 0) 
