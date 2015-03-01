@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Fibonacci where
 import Data.Array (array)
 import Data.List (genericTake)
@@ -81,3 +82,12 @@ interleaveStreams (Elem a as) (Elem b bs) = Elem a (Elem b (interleaveStreams as
 
 x :: Stream Integer
 x = Elem 0 (Elem 1 (streamRepeat 0))
+
+instance Num (Stream Integer) where
+    fromInteger n = Elem n (streamRepeat 0)
+    negate (Elem a as) = Elem (negate a) (negate as)
+    (+) (Elem a as) (Elem b bs) = Elem (a+b) (as + bs)
+    (*) (Elem a a') bs@(Elem b b') = Elem (a*b) ((fromInteger a) * b' + a' * bs)
+
+instance Fractional (Stream Integer) where
+    (/) (Elem a a') (Elem b b') = Elem (a `div` b) (...)
