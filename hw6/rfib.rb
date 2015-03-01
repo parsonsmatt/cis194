@@ -2,7 +2,6 @@ def fib x
   0 if x == 0
   1 if x == 1
   fib(x-1) + fib(x-2)
-  end
 end
 
 def fib2 x
