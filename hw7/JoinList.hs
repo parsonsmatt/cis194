@@ -7,6 +7,8 @@ data JoinList m a = Empty
                   | Append m (JoinList m a) (JoinList m a)
     deriving (Eq, Show)
 
+single :: a -> JoinList (Size) a
+single a = Single (Size 1) a
 
 -- Exercise #1:
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
@@ -27,8 +29,37 @@ indexJ x (Single s a)
     | x == 0    = Just a
     | otherwise = Nothing
 indexJ x (Append m l r)
-    | x > gs m  = Nothing
-    | x < tl    = indexJ x l
-    | otherwise = indexJ (x - tl) r
-  where tl = gs $ tag l
-        gs = getSize . size
+    | x > intFromSized m = Nothing
+    | x < intFromTag l   = indexJ x l
+    | otherwise          = indexJ (x - intFromTag l) r
+
+intFromSized :: Sized a => a -> Int
+intFromSized = getSize . size
+
+intFromTag :: (Monoid m, Sized m) => JoinList m a -> Int
+intFromTag = intFromSized . tag
+
+dropJ :: (Sized b, Monoid b) =>
+         Int -> JoinList b a -> JoinList b a
+dropJ _ Empty = Empty
+dropJ x (Single m a) 
+    | x > 0     = Empty
+    | otherwise = (Single m a)
+dropJ x (Append m l r)
+    | x > intFromSized m = Empty
+    | x < sl             = (dropJ x l) +++ r
+    | otherwise          = dropJ (x - sl) r 
+  where sl = intFromTag l
+
+takeJ :: (Sized b, Monoid b) =>
+         Int -> JoinList b a -> JoinList b a
+takeJ _ Empty = Empty
+takeJ x (Single m a)
+    | x < 0     = (Single m a)
+    | otherwise = Empty
+takeJ x (Append m l r)
+    | x < 0     = Append m l r
+    | x < sl    = (takeJ x l)
+    | otherwise = l +++ (takeJ (x - sl) r)
+  where sl = intFromTag l
+
