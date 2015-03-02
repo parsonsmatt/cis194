@@ -28,7 +28,7 @@ indexJ x (Single s a)
     | otherwise = Nothing
 indexJ x (Append m l r)
     | x > gs m  = Nothing
-    | x < gs tl = indexJ x l
-    | otherwise = indexJ (x - (gs tl)) r
-  where tl = tag l
+    | x < tl    = indexJ x l
+    | otherwise = indexJ (x - tl) r
+  where tl = gs $ tag l
         gs = getSize . size
