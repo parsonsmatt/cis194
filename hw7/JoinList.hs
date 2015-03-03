@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 module JoinList where
+import Data.List
 import Data.Monoid
 import Scrabble
 import Buffer
@@ -84,14 +85,15 @@ instance Buffer (JoinList (Score, Size) String) where
     toString (Single m a)   = a
     toString (Append m l r) = toString l ++ toString r
 
-    fromString ""     = Empty
-    fromString [x]    = Single (score x, 1) [x]
-    fromString (a:as) = foldl (\acc x -> acc +++ fromString [a] ) Empty (a:as)
+    fromString = foldl1 (+++) . map makeSingle . lines
+          where makeSingle s = Single (scoreString s, stringSize s) s
+                stringSize   = Size . length . words
 
     line x _ | x < 0  = Nothing
     line _ Empty      = Nothing
-    line x (Single _ a) | x == 0    = Just a
-                      | otherwise = Nothing
+    line x (Single _ a) 
+        | x == 0    = Just a
+        | otherwise = Nothing
     line x (Append (sc, sz) l r)
         | x > getSize sz = Nothing
         | x < szl = line x l
