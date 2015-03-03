@@ -86,8 +86,7 @@ instance Buffer (JoinList (Score, Size) String) where
     toString (Append m l r) = toString l ++ toString r
 
     fromString = foldl1 (+++) . map makeSingle . lines
-          where makeSingle s = Single (scoreString s, stringSize s) s
-                stringSize   = Size . length . words
+          where makeSingle s = Single (scoreString s, Size 1) s
 
     line x _ | x < 0  = Nothing
     line _ Empty      = Nothing
