@@ -50,3 +50,21 @@ data GuestList = GL [Employee] Fun
 
 instance Ord GuestList where
   compare (GL _ f1) (GL _ f2) = compare f1 f2
+
+-- Exercise #1:
+
+glCons :: Employee -> GuestList -> GuestList
+glCons emp (GL emps funScore) = GL (emp:emps) (funScore + empFun emp) 
+
+
+instance Monoid GuestList where
+    mempty  = GL [] 0
+    mappend (GL emps1 f1) (GL emps2 f2) = GL (concat [emps1, emps2]) (f1 + f2)  
+
+
+moreFun :: GuestList -> GuestList -> GuestList
+moreFun (GL emps1 f1) (GL emps2 f2)
+    | f1 > f2   = (GL emps1 f1)
+    | otherwise = (GL emps2 f2)
+
+
