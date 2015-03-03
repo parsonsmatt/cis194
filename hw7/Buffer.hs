@@ -27,17 +27,3 @@ class Buffer b where
   --   be paid for publishing the contents of the buffer.
   value :: b -> Int
 
-instance Buffer (JoinList (Score, Size) String) where
-    toString Empty = "" 
-    toString (Single _ a) = a
-    toString (Append _ l r) = toString l ++ toString r
-
-    fromString =
-    
-    line        =
-    
-    replaceLine =
-    
-    numLines    =
-    
-    value       =
