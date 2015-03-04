@@ -1,6 +1,6 @@
 module Employee where
-
-import           Data.Tree
+import Data.Tree
+import Data.Monoid
 
 -- Employee names are represented by Strings.
 type Name = String
@@ -67,4 +67,8 @@ moreFun (GL emps1 f1) (GL emps2 f2)
     | f1 > f2   = (GL emps1 f1)
     | otherwise = (GL emps2 f2)
 
+-- Exercise 2:
 
+
+treeFold :: (b -> a -> b) -> Tree a -> b -> b
+treeFold f (Node label trees) start = f start label 
