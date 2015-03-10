@@ -72,3 +72,8 @@ moreFun (GL emps1 f1) (GL emps2 f2)
 
 foldTree :: (Monoid m) => (a -> m) -> Tree a -> m
 foldTree = foldMap -- yeah this is kinda cheating I guess
+
+-- Exercise 3:
+
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel emp lists = 
