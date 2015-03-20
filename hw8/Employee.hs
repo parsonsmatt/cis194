@@ -60,7 +60,7 @@ glCons emp (GL emps funScore) = GL (emp:emps) (funScore + empFun emp)
 
 instance Monoid GuestList where
     mempty  = GL [] 0
-    mappend (GL emps1 f1) (GL emps2 f2) = GL (concat [emps1, emps2]) (f1 + f2)  
+    mappend (GL emps1 f1) (GL emps2 f2) = GL (emps1 ++ emps2) (f1 + f2)  
 
 
 moreFun :: GuestList -> GuestList -> GuestList
@@ -76,4 +76,4 @@ foldTree = foldMap -- yeah this is kinda cheating I guess
 -- Exercise 3:
 
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel emp lists = 
+nextLevel boss sublists = (GL [boss] (empFun boss, bestSublist)
