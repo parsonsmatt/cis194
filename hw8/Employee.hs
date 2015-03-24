@@ -75,5 +75,14 @@ foldTree = foldMap -- yeah this is kinda cheating I guess
 
 -- Exercise 3:
 
-nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel boss sublists = (GL [boss] (empFun boss, bestSublist)
+-- nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+-- nextLevel boss sublists = (GL [boss] (empFun boss, []))
+
+getFunFromBoss :: Tree Employee -> Fun
+getFunFromBoss = empFun . rootLabel
+
+getFunFromImmediateSubordinates :: Tree Employee -> Fun
+getFunFromImmediateSubordinates (Node _ emps) = foldl1 (+) $ map getFunFromBoss emps
+
+shouldInviteBoss :: Tree Employee -> Bool
+shouldInviteBoss node@Node{} = getFunFromBoss node >= getFunFromImmediateSubordinates node
