@@ -70,13 +70,20 @@ moreFun (GL emps1 f1) (GL emps2 f2)
 
 -- Exercise 2:
 
-foldTree :: (Monoid m) => (a -> m) -> Tree a -> m
-foldTree = foldMap -- yeah this is kinda cheating I guess
+{- foldr has method sig: (a -> b -> b) -> b -> [a] -> b
+   which means "folding function, starting value, list, result"
+   foldTree therefore would have "folding function, starting value, tree, result"
+   or: -}
+foldTree :: (Monoid a) => (a -> b -> b) -> b -> Tree a -> b
+foldTree f start tree = f root start `mappend` fmap (foldTree f mempty) branches
+                    where 
+                        root     = rootLabel tree
+                        branches = subForest tree
 
 -- Exercise 3:
 
--- nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
--- nextLevel boss sublists = (GL [boss] (empFun boss, []))
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel boss sublists = undefined
 
 getFunFromBoss :: Tree Employee -> Fun
 getFunFromBoss = empFun . rootLabel
