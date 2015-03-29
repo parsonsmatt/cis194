@@ -1,6 +1,6 @@
 -- HW #2
 
-{- OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall #-}
 module LogAnalysis where
 
 import Log
@@ -8,7 +8,7 @@ import Log
 -- Exercise #1:
 
 parse :: String -> [LogMessage]
-parse str = map (parseMessage) (lines(str))
+parse = map parseMessage . lines
 	
 parseMessage :: String -> LogMessage
 parseMessage str = LogMessage msgType ts rest
@@ -25,8 +25,8 @@ getMessageType str
 
 getTimeStamp :: String -> TimeStamp
 getTimeStamp str
-	| isError (getMessageType str) = read (head (drop 2 (words(str)))) :: Int
-	| otherwise = read (head (tail (words (str)))) :: Int
+	| isError (getMessageType str) = read (words str !! 2) :: Int
+	| otherwise = read (head (tail (words str))) :: Int
 
 getRest :: String -> String
 getRest str  
@@ -73,8 +73,8 @@ whatWentWrong [msg]
 	| otherwise    = []
 	where str = getString msg
 whatWentWrong (msg:msgs)
-	| passTest msg = [str] ++ whatWentWrong msgs
-	| otherwise    = [] ++ whatWentWrong msgs
+	| passTest msg = str : whatWentWrong msgs
+	| otherwise    = whatWentWrong msgs
 	where str = getString msg
 
 passTest :: LogMessage -> Bool
