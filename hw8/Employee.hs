@@ -97,12 +97,11 @@ nextLevel emp []        = (glCons emp mempty, mempty)
 nextLevel boss sublists = (bestWithBoss, bestWithoutBoss)
                       where 
                           bestWithBoss    = glCons boss noSubordinates
-                          bestWithoutBoss = mconcat subordinates
-                          subordinates    = map fst sublists
+                          bestWithoutBoss = mconcat $ map fst sublists
                           noSubordinates  = mconcat $ map snd sublists
 
--- some test info
-a = Emp "Matt" 10
-b = Emp "What" 15
-c = Emp "ASdf" 20
-tr = Node c [Node a [], Node b []]
+
+maxFun :: Tree Employee -> GuestList
+maxFun = uncurry moreFun . foldTree' nextLevel
+
+
