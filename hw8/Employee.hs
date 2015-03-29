@@ -65,13 +65,16 @@ instance Monoid GuestList where
 
 moreFun :: GuestList -> GuestList -> GuestList
 moreFun (GL emps1 f1) (GL emps2 f2)
-    | f1 > f2   = (GL emps1 f1)
-    | otherwise = (GL emps2 f2)
+    | f1 > f2   = GL emps1 f1
+    | otherwise = GL emps2 f2
 
 -- Exercise 2:
 
-foldTree :: (a -> b -> b) -> b -> Tree a -> b
-foldTree = F.foldr
+foldTree :: (Monoid b) => (a -> b -> b) -> b -> Tree a -> b
+foldTree f start tree = mconcat (map (foldTree f mempty) branches) <> f root start
+                    where
+                        root     = rootLabel tree
+                        branches = subForest tree
 
 -- Exercise 3:
 
@@ -81,7 +84,8 @@ nextLevel :: Employee ->
              -- List of results for each subtree under the boss. First GuestList
              -- is a best guest list with the boss of that tree. Second is best
              -- GuestList without the boss of that tree.
-             (GuestList, GuestList) -- (Sublist w/ boss, sublist w/o boss) 
+             (GuestList, GuestList)
+             -- (Sublist w/ boss, sublist w/o boss) 
 nextLevel emp []        = (glCons emp mempty, mempty)
 nextLevel boss sublists = (bestWithBoss, bestWithoutBoss)
                       where 
@@ -90,6 +94,8 @@ nextLevel boss sublists = (bestWithBoss, bestWithoutBoss)
                           subordinates    = map fst sublists
                           noSubordinates  = mconcat $ map snd sublists
 
-
-maxFun :: Tree Employee -> GuestList
-maxFun tree = undefined
+-- some test info
+a = Emp "Matt" 10
+b = Emp "What" 15
+c = Emp "ASdf" 20
+tr = Node c [Node a [], Node b []]
