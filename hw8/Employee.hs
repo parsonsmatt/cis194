@@ -1,5 +1,6 @@
 module Employee where
-import qualified Data.Foldable as F
+import Control.Monad (forM)
+import Data.List (sort)
 import Data.Tree
 import Data.Monoid
 
@@ -104,4 +105,21 @@ nextLevel boss sublists = (bestWithBoss, bestWithoutBoss)
 maxFun :: Tree Employee -> GuestList
 maxFun = uncurry moreFun . foldTree' nextLevel
 
+-- Exercise 5
+
+getGuestListFun :: GuestList -> Fun
+getGuestListFun (GL _ f) = f
+
+getEmployees :: GuestList -> [Employee]
+getEmployees (GL emps _) = emps
+
+main :: IO ()
+main = do
+    companyText <- readFile "company.txt"
+    let company = read companyText :: Tree Employee 
+    let guestList = maxFun company
+    let guestListFun = getGuestListFun guestList
+    let guests = unlines $ sort $ map empName $ getEmployees guestList
+    putStrLn $ "Total fun: " ++ show guestListFun
+    putStrLn guests
 
