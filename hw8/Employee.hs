@@ -1,5 +1,5 @@
 module Employee where
-import Data.Foldable (Foldable, foldMap)
+import qualified Data.Foldable as F
 import Data.Tree
 import Data.Monoid
 
@@ -70,26 +70,26 @@ moreFun (GL emps1 f1) (GL emps2 f2)
 
 -- Exercise 2:
 
-{- foldr has method sig: (a -> b -> b) -> b -> [a] -> b
-   which means "folding function, starting value, list, result"
-   foldTree therefore would have "folding function, starting value, tree, result"
-   or: -}
-foldTree :: (Monoid a) => (a -> b -> b) -> b -> Tree a -> b
-foldTree f start tree = f root start `mappend` fmap (foldTree f mempty) branches
-                    where 
-                        root     = rootLabel tree
-                        branches = subForest tree
+foldTree :: (a -> b -> b) -> b -> Tree a -> b
+foldTree = F.foldr
 
 -- Exercise 3:
 
-nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel boss sublists = undefined
+nextLevel :: Employee -> 
+             -- The boss of the current subtree
+             [(GuestList, GuestList)] -> 
+             -- List of results for each subtree under the boss. First GuestList
+             -- is a best guest list with the boss of that tree. Second is best
+             -- GuestList without the boss of that tree.
+             (GuestList, GuestList) -- (Sublist w/ boss, sublist w/o boss) 
+nextLevel emp []        = (glCons emp mempty, mempty)
+nextLevel boss sublists = (bestWithBoss, bestWithoutBoss)
+                      where 
+                          bestWithBoss    = glCons boss noSubordinates
+                          bestWithoutBoss = mconcat subordinates
+                          subordinates    = map fst sublists
+                          noSubordinates  = mconcat $ map snd sublists
 
-getFunFromBoss :: Tree Employee -> Fun
-getFunFromBoss = empFun . rootLabel
 
-getFunFromImmediateSubordinates :: Tree Employee -> Fun
-getFunFromImmediateSubordinates (Node _ emps) = foldl1 (+) $ map getFunFromBoss emps
-
-shouldInviteBoss :: Tree Employee -> Bool
-shouldInviteBoss node@Node{} = getFunFromBoss node >= getFunFromImmediateSubordinates node
+maxFun :: Tree Employee -> GuestList
+maxFun tree = undefined
