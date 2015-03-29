@@ -117,9 +117,9 @@ main :: IO ()
 main = do
     companyText <- readFile "company.txt"
     let company = read companyText :: Tree Employee 
-    let guestList = maxFun company
-    let guestListFun = getGuestListFun guestList
-    let guests = unlines $ sort $ map empName $ getEmployees guestList
-    putStrLn $ "Total fun: " ++ show guestListFun
+        guestList = maxFun company
+        fun       = getGuestListFun guestList
+        guests    = unlines $ sort $ map empName $ getEmployees guestList
+    putStrLn $ "Total fun: " ++ show fun 
     putStrLn guests
 
