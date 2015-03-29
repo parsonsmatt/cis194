@@ -82,7 +82,7 @@ map' f = foldr (\x acc -> f x : acc) []
 -- Exercise 4:
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = map ((+1) <$> (*2)) $ list
+sieveSundaram n = map ((+1) <$> (*2)) list
                 where list = upToN \\ exclude
                       exclude = foldl f [] $ cartProd upToN upToN
                       f acc (i,j) = if i <= j && g i j <= n 
