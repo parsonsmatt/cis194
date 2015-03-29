@@ -76,6 +76,13 @@ foldTree f start tree = mconcat (map (foldTree f mempty) branches) <> f root sta
                         root     = rootLabel tree
                         branches = subForest tree
 
+-- For whatever reason, the above fold wasn't playing nicely...
+foldTree' :: (a -> [b] -> b) -> Tree a -> b
+foldTree' f tree = f root $ map (foldTree' f) branches
+               where
+                   root     = rootLabel tree
+                   branches = subForest tree
+
 -- Exercise 3:
 
 nextLevel :: Employee -> 
