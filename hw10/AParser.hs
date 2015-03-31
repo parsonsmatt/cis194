@@ -86,8 +86,17 @@ abParser = Parser chars
            chars _              = Nothing
 
 
+abParser' :: Parser (Char, Char)
+abParser' = (\a b -> (a, b)) <$> char 'a' <*> char 'b'
+
 abParser_ :: Parser ()
 abParser_ = Parser chars
         where
             chars ('a':'b':rest) = Just ((), rest)
             chars _              = Nothing
+
+
+intPair :: Parser [Int]
+intPair = Parser ints
+      where
+          ints = undefined
