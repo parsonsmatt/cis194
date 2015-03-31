@@ -72,9 +72,9 @@ instance Applicative Parser where
     pure a = Parser (\str -> Just (a, str))
     p1 <*> p2 = Parser new 
       where
-          new = \str -> case runParser p1 str of
-                             Nothing -> Nothing
-                             Just (token, rest) -> runParser (token <$> p2) rest
+          new str = case runParser p1 str of
+                         Nothing -> Nothing
+                         Just (token, rest) -> runParser (token <$> p2) rest
 
 
 -- Exercise #3:
@@ -88,8 +88,16 @@ abParser_ = (\a b -> ()) <$> char 'a' <*> char 'b'
 
 
 skipSpace :: Parser ()
-skipSpace = (\a -> ()) <$> char ' '
+skipSpace = const () <$> char ' '
 
 
 intPair :: Parser [Integer]
 intPair = (\one _ two -> [one, two] ) <$> posInt <*> skipSpace <*> posInt
+
+-- Exercise #4:
+
+instance Alternative Parser where
+    empty = Parser $ const Nothing
+    p1 <|> p2 = Parser $ \str -> runParser p1 str <|> runParser p2 str
+                                  
+                 
