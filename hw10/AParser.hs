@@ -87,5 +87,9 @@ abParser_ :: Parser ()
 abParser_ = (\a b -> ()) <$> char 'a' <*> char 'b'
 
 
-intPair :: Parser [Int]
-intPair = (\ {- some lambda -}) <$> {- get integer -} <*> {- discard space -} <*> {- get integer -} 
+skipSpace :: Parser ()
+skipSpace = (\a -> ()) <$> char ' '
+
+
+intPair :: Parser [Integer]
+intPair = (\one _ two -> [one, two] ) <$> posInt <*> skipSpace <*> posInt
