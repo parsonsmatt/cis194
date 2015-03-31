@@ -80,23 +80,12 @@ instance Applicative Parser where
 -- Exercise #3:
 
 abParser :: Parser (Char, Char)
-abParser = Parser chars
-       where
-           chars ('a':'b':rest) = Just (('a','b'), rest)
-           chars _              = Nothing
+abParser = (\a b -> (a, b)) <$> char 'a' <*> char 'b'
 
-
-abParser' :: Parser (Char, Char)
-abParser' = (\a b -> (a, b)) <$> char 'a' <*> char 'b'
 
 abParser_ :: Parser ()
-abParser_ = Parser chars
-        where
-            chars ('a':'b':rest) = Just ((), rest)
-            chars _              = Nothing
+abParser_ = (\a b -> ()) <$> char 'a' <*> char 'b'
 
 
 intPair :: Parser [Int]
-intPair = Parser ints
-      where
-          ints = undefined
+intPair = (\ {- some lambda -}) <$> {- get integer -} <*> {- discard space -} <*> {- get integer -} 
