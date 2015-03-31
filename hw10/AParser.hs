@@ -82,8 +82,15 @@ instance Applicative Parser where
 abParser :: Parser (Char, Char)
 abParser = Parser chars
        where
-           chars str
-             | firstTwo == "ab" = Just (('a','b'), rest)
-             | otherwise        = Nothing
-             where firstTwo = take 2 str
-                   rest     = drop 2 str
+           chars ('a':'b':rest) = Just (('a','b'), rest)
+           chars _              = Nothing
+
+
+abParser_ :: Parser ()
+abParser_ = Parser chars
+        where
+            chars str
+              | firstTwo == "ab" = Just ((), rest)
+              | otherwise        = Nothing
+              where firstTwo = take 2 str
+                    rest     = drop 2 str
