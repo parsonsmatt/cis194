@@ -64,10 +64,12 @@ first :: (a -> b) -> (a,c) -> (b,c)
 first f (a,c) = (f a, c)
 
 instance Functor Parser where
-    fmap f a = Parser $ fmap (fmap (first f)) (runParser a)
+    fmap f a = Parser (fmap (fmap (first f)) (runParser a))
 
 -- Exercise #2:
 
 instance Applicative Parser where
-    pure a = undefined
-    p1 <*> p2 = undefined
+    pure a = Parser (\str -> Just (a, str))
+    p1 <*> p2 = Parser $ \str -> case runParser p1 str of
+                                      Nothing -> Nothing
+                                      Just (token, rest) -> runParser (token <$> p2) rest
