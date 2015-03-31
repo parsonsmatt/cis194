@@ -89,8 +89,5 @@ abParser = Parser chars
 abParser_ :: Parser ()
 abParser_ = Parser chars
         where
-            chars str
-              | firstTwo == "ab" = Just ((), rest)
-              | otherwise        = Nothing
-              where firstTwo = take 2 str
-                    rest     = drop 2 str
+            chars ('a':'b':rest) = Just ((), rest)
+            chars _              = Nothing
