@@ -70,6 +70,8 @@ instance Functor Parser where
 
 instance Applicative Parser where
     pure a = Parser (\str -> Just (a, str))
-    p1 <*> p2 = Parser $ \str -> case runParser p1 str of
-                                      Nothing -> Nothing
-                                      Just (token, rest) -> runParser (token <$> p2) rest
+    p1 <*> p2 = Parser new 
+      where
+          new = \str -> case runParser p1 str of
+                             Nothing -> Nothing
+                             Just (token, rest) -> runParser (token <$> p2) rest
