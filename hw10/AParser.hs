@@ -75,3 +75,15 @@ instance Applicative Parser where
           new = \str -> case runParser p1 str of
                              Nothing -> Nothing
                              Just (token, rest) -> runParser (token <$> p2) rest
+
+
+-- Exercise #3:
+
+abParser :: Parser (Char, Char)
+abParser = Parser chars
+       where
+           chars str
+             | firstTwo == "ab" = Just (('a','b'), rest)
+             | otherwise        = Nothing
+             where firstTwo = take 2 str
+                   rest     = drop 2 str
