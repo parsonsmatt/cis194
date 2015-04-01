@@ -72,7 +72,7 @@ inParser :: ((String -> Maybe (a1, String)) -- Parser function type
 inParser f = Parser . f . runParser
 
 instance Functor Parser where
-    fmap f a = Parser (fmap (fmap (first f)) (runParser a))
+    fmap f a = Parser $ fmap (fmap (first f)) $ runParser a
 
 -- Exercise #2:
 
