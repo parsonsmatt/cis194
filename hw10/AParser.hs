@@ -64,6 +64,11 @@ first :: (a -> b) -> (a,c) -> (b,c)
 first f (a,c) = (f a, c)
 
 -- Ok, so this function is apparently useful:
+inParser :: ((String -> Maybe (a1, String)) -- Parser function type
+         -> String                          -- Parser input
+         -> Maybe (a, String))              -- Parser Result
+         -> Parser a1                       -- Parser a1
+         -> Parser a                        -- Parser a
 inParser f = Parser . f . runParser
 
 instance Functor Parser where
