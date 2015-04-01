@@ -3,7 +3,7 @@ import Data.List
 
 -- Exercise 1: Hopscotch
 skips :: [a] -> [[a]]
-skips xs = zipWith takeEvery [1..] (map (const xs) xs)
+skips xs = zipWith takeEvery [1..length xs] (repeat xs)
 
 takeEvery :: Int -> [a] -> [a]
 takeEvery n xs 
