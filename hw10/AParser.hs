@@ -84,7 +84,7 @@ abParser = (\a b -> (a, b)) <$> char 'a' <*> char 'b'
 
 
 abParser_ :: Parser ()
-abParser_ = (\a b -> ()) <$> char 'a' <*> char 'b'
+abParser_ = discard abParser
 
 
 skipSpace :: Parser ()
@@ -99,5 +99,18 @@ intPair = (\one _ two -> [one, two] ) <$> posInt <*> skipSpace <*> posInt
 instance Alternative Parser where
     empty = Parser $ const Nothing
     p1 <|> p2 = Parser $ \str -> runParser p1 str <|> runParser p2 str
-                                  
-                 
+                            
+
+-- Exercise #5:
+
+intOrUpperCase :: Parser ()
+intOrUpperCase = Parser $ \s -> runParser posInt_ s <|> runParser (discard $ satisfy isUpper) s
+
+intOrUpperCase' :: Parser ()
+intOrUpperCase' = undefined -- there's gotta be a better way to do that!
+
+posInt_ :: Parser ()
+posInt_ = discard posInt
+
+discard :: Parser a -> Parser ()
+discard res = const () <$> res
