@@ -98,7 +98,7 @@ intPair = (\one _ two -> [one, two] ) <$> posInt <*> skipSpace <*> posInt
 
 instance Alternative Parser where
     empty = Parser $ const Nothing
-    p1 <|> p2 = Parser $ \str -> runParser p1 str <|> runParser p2 str
+    Parser p1 <|> Parser p2 = Parser $ liftA2 (<|>) p1 p2
                             
 
 -- Exercise #5:
