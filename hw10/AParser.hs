@@ -63,6 +63,9 @@ posInt = Parser f
 first :: (a -> b) -> (a,c) -> (b,c)
 first f (a,c) = (f a, c)
 
+-- Ok, so this function is apparently useful:
+inParser f = Parser . f . runParser
+
 instance Functor Parser where
     fmap f a = Parser (fmap (fmap (first f)) (runParser a))
 
