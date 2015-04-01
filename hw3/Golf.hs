@@ -4,10 +4,10 @@ import Data.List
 -- Exercise 1: Hopscotch
 skips :: [a] -> [[a]]
 skips [] = []
-skips xs = map deIndex (map (deIndex) (flatten xs))
+skips xs = map (deIndex . deIndex) (flatten xs)
 
 deIndex :: (Integral a) => [(a,b)] -> [b]
-deIndex x = map snd x
+deIndex = map snd
 
 flatten :: [b] -> [[(Int, (Int, b))]]
 flatten xs = map dropIndex $ buildList xs
@@ -24,7 +24,7 @@ buildList = index . expandList . index
 -- Takes a list and converts it into a list of lists, each of which
 -- is the original list.
 expandList :: [a] -> [[a]]
-expandList xs = map (\x -> xs) xs
+expandList xs = map (const xs) xs
 
 -- Takes a list and indexes the items.
 index :: [a] -> [(Int,a)]
@@ -32,7 +32,16 @@ index = zip [1..]
 
 -- Exercise 1, take 2:
 skips' :: [a] -> [[a]]
-skips xs = 
+skips' xs = go 1 xs
+        where
+            go n list 
+              | n > length list = []
+              | otherwise       = takeEvery n list : go (n+1) list
+
+takeEvery :: Int -> [a] -> [a]
+takeEvery n xs 
+    | n > length xs = []
+    | otherwise     = xs !! (n-1) : takeEvery n (drop n xs)
 
 
 -- Exercise 2: Local maxima
@@ -40,8 +49,8 @@ skips xs =
 localMaxima :: [Integer] -> [Integer]
 localMaxima []     = []
 localMaxima [x]    = []
-localMaxima (x:xs) = if (x > head xs) 
-                     then x : (localMaxima xs)
+localMaxima (x:xs) = if x > head xs
+                     then x : localMaxima xs
                      else localMaxima xs
 
 -- Exercise 3: Histogram
@@ -54,15 +63,15 @@ histogram xs = foldr1 (\str acc -> acc ++ "\n" ++ str)
 
 -- Remove all-space strings:
 removeSpaces :: [String] -> [String]
-removeSpaces = filter (any (\char -> char /= ' '))
+removeSpaces = filter (any (/=' '))
 
 -- Compose total string set:
 composeStrings :: [(Integer, Integer)] -> [String]
-composeStrings xs = map buildString xs
+composeStrings = map buildString
 
 -- Construct a single string:
 buildString :: (Integer, Integer) -> String
-buildString (x,y) = (show x) ++ 
+buildString (x,y) = show x ++ 
                     "=" ++ 
                     genericReplicate y '*' ++
                     genericReplicate (9-y) ' '
