@@ -43,6 +43,8 @@ takeEvery n xs
     | n > length xs = []
     | otherwise     = xs !! (n-1) : takeEvery n (drop n xs)
 
+skips'' :: [a] -> [[a]]
+skips'' xs = zipWith takeEvery [1..] (map (const xs) xs)
 
 -- Exercise 2: Local maxima
 
