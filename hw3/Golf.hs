@@ -3,51 +3,15 @@ import Data.List
 
 -- Exercise 1: Hopscotch
 skips :: [a] -> [[a]]
-skips [] = []
-skips xs = map (deIndex . deIndex) (flatten xs)
-
-deIndex :: (Integral a) => [(a,b)] -> [b]
-deIndex = map snd
-
-flatten :: [b] -> [[(Int, (Int, b))]]
-flatten xs = map dropIndex $ buildList xs
-
--- Drops elements in the list if they're divisible by the number.
-dropIndex :: (Int,[a]) -> [(Int,a)]
-dropIndex (n,xs) = filter (\(x,_) -> x `mod` n == 0) (index xs)
-
--- Takes a list, indexes it, expands it into a list of lists, and
--- indexes the top level list.
-buildList :: [a] -> [(Int, [(Int, a)])]
-buildList = index . expandList . index
-
--- Takes a list and converts it into a list of lists, each of which
--- is the original list.
-expandList :: [a] -> [[a]]
-expandList xs = map (const xs) xs
-
--- Takes a list and indexes the items.
-index :: [a] -> [(Int,a)]
-index = zip [1..]
-
--- Exercise 1, take 2:
-skips' :: [a] -> [[a]]
-skips' xs = go 1 xs
-        where
-            go n list 
-              | n > length list = []
-              | otherwise       = takeEvery n list : go (n+1) list
+skips xs = zipWith takeEvery [1..] (map (const xs) xs)
 
 takeEvery :: Int -> [a] -> [a]
 takeEvery n xs 
     | n > length xs = []
     | otherwise     = xs !! (n-1) : takeEvery n (drop n xs)
 
-skips'' :: [a] -> [[a]]
-skips'' xs = zipWith takeEvery [1..] (map (const xs) xs)
 
 -- Exercise 2: Local maxima
-
 localMaxima :: [Integer] -> [Integer]
 localMaxima []     = []
 localMaxima [x]    = []
