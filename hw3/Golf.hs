@@ -3,46 +3,20 @@ import Data.List
 
 -- Exercise 1: Hopscotch
 skips :: [a] -> [[a]]
-skips [] = []
-skips xs = map deIndex (map (deIndex) (flatten xs))
+skips xs = zipWith takeEvery [1..length xs] (repeat xs)
 
-deIndex :: (Integral a) => [(a,b)] -> [b]
-deIndex x = map snd x
-
-flatten :: [b] -> [[(Int, (Int, b))]]
-flatten xs = map dropIndex $ buildList xs
-
--- Drops elements in the list if they're divisible by the number.
-dropIndex :: (Int,[a]) -> [(Int,a)]
-dropIndex (n,xs) = filter (\(x,_) -> x `mod` n == 0) (index xs)
-
--- Takes a list, indexes it, expands it into a list of lists, and
--- indexes the top level list.
-buildList :: [a] -> [(Int, [(Int, a)])]
-buildList = index . expandList . index
-
--- Takes a list and converts it into a list of lists, each of which
--- is the original list.
-expandList :: [a] -> [[a]]
-expandList xs = map (\x -> xs) xs
-
--- Takes a list and indexes the items.
-index :: [a] -> [(Int,a)]
-index = zip [1..]
-
--- Exercise 1, take 2:
-skips' :: [a] -> [[a]]
-skips xs = 
+takeEvery :: Int -> [a] -> [a]
+takeEvery n xs 
+    | n > length xs = []
+    | otherwise     = xs !! (n-1) : takeEvery n (drop n xs)
 
 
 -- Exercise 2: Local maxima
-
 localMaxima :: [Integer] -> [Integer]
-localMaxima []     = []
-localMaxima [x]    = []
-localMaxima (x:xs) = if (x > head xs) 
-                     then x : (localMaxima xs)
-                     else localMaxima xs
+localMaxima (x:y:z:zs) 
+    | y > x && y > z = y : localMaxima (y:z:zs)
+    | otherwise      =     localMaxima (y:z:zs)
+localMaxima _ = []
 
 -- Exercise 3: Histogram
 
@@ -54,15 +28,15 @@ histogram xs = foldr1 (\str acc -> acc ++ "\n" ++ str)
 
 -- Remove all-space strings:
 removeSpaces :: [String] -> [String]
-removeSpaces = filter (any (\char -> char /= ' '))
+removeSpaces = filter (any (/=' '))
 
 -- Compose total string set:
 composeStrings :: [(Integer, Integer)] -> [String]
-composeStrings xs = map buildString xs
+composeStrings = map buildString
 
 -- Construct a single string:
 buildString :: (Integer, Integer) -> String
-buildString (x,y) = (show x) ++ 
+buildString (x,y) = show x ++ 
                     "=" ++ 
                     genericReplicate y '*' ++
                     genericReplicate (9-y) ' '
