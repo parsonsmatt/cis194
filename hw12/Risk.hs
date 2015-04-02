@@ -3,6 +3,7 @@
 module Risk where
 
 import Control.Monad.Random
+import Control.Monad
 
 ------------------------------------------------------------
 -- Die values
@@ -26,3 +27,9 @@ die = getRandom
 type Army = Int
 
 data Battlefield = Battlefield { attackers :: Army, defenders :: Army }
+
+battle :: Battlefield -> Rand StdGen Battlefield
+battle = undefined
+
+roll :: Int -> Rand StdGen [DieValue]
+roll n = sequence (replicate n die) 
