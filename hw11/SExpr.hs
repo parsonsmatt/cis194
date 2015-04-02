@@ -18,15 +18,35 @@ zeroOrMore p = oneOrMore p <|> pure []
 oneOrMore :: Parser a -> Parser [a]
 oneOrMore p = (:) <$> p <*> zeroOrMore p
 
+{- Ok, what?
+ - oneOrMore first fmaps (:) over the parser p. This creates a 
+ - value of type Parser (a -> [a]) which might be represented as
+ - Parser { runParser = Just (x : , rest) }. Then oneOrMore applies
+ - the 'function in a context' to the Parser that is a result of 
+ - zeroOrMore p.
+ -
+ - zeroOrMore p calls oneOrMore p. If the parser succeeds, then the
+ - result is of the same type, and might be thought of as:
+ -      Parser { runParser = Just (x : y : , rest) }
+ - At some point, oneOrMore will fail. In this case, zeroOrMore
+ - ignores the Nothing value, and instead returns `pure []` which
+ - lifts [] into the Parser context, which would result in a final
+ - value of:
+ -      Parser { runParser = Just (x : y : z : [], rest) }
+ - Which of course translates into 
+ -      Parser { runParser = Just ([x,y,z], rest) }
+ -  Which is precisely what we're looking for!
+ -}
+
 ------------------------------------------------------------
 --  2. Utilities
 ------------------------------------------------------------
 
 spaces :: Parser String
-spaces = undefined
+spaces = zeroOrMore (satisfy isSpace)
 
 ident :: Parser String
-ident = undefined
+ident = (:) <$> (satisfy isAlpha) <*> zeroOrMore (satisfy isAlphaNum)
 
 ------------------------------------------------------------
 --  3. Parsing S-expressions
