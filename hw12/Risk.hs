@@ -31,7 +31,7 @@ type Army = Int
 data Battlefield = Battlefield { attackers :: Army, defenders :: Army }
     deriving Show
 
--- Exercise #1:
+-- Exercise #2:
 
 battle :: Battlefield -> Rand StdGen Battlefield
 battle bf = do 
@@ -50,7 +50,7 @@ battle bf = do
       roll n = replicateM n die
 
 
--- Exercise #2:
+-- Exercise #3:
 
 invade :: Battlefield -> Rand StdGen Battlefield
 invade bf = do
@@ -59,7 +59,7 @@ invade bf = do
        then invade newBf
        else return newBf
 
--- Exeercise #3:
+-- Exercise #4:
 
 successProb :: Battlefield -> Rand StdGen Double
 successProb bf = do
