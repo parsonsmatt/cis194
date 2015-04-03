@@ -4,7 +4,7 @@ module Risk where
 
 import Control.Monad.Random
 import Control.Monad
-import Data.List (sort)
+import Data.List (sort, foldl')
 
 ------------------------------------------------------------
 -- Die values
@@ -46,16 +46,24 @@ battle bf = do
       def = defenders bf
       attackForce  = if atk > 4 then 3 else min (atk - 1) 3
       defenseForce = if def > 2 then 2 else def
+      roll n = replicateM n die
 
-
-roll :: Int -> Rand StdGen [DieValue]
-roll n = replicateM n die
 
 -- Exercise #2:
 
 invade :: Battlefield -> Rand StdGen Battlefield
 invade bf = do
     newBf <- battle bf
-    if attackers newBf > 2 && defenders newBf > 0  
+    if attackers newBf > 1 && defenders newBf > 0  
        then invade newBf
        else return newBf
+
+-- Exeercise #3:
+
+successProb :: Battlefield -> Rand StdGen Double
+successProb bf = do
+    battlefields <- mapM invade (replicate 1000 bf) 
+    let wins = foldl' winFold  0 battlefields
+    return ((fromIntegral wins) / (fromIntegral . length) battlefields)
+    where 
+        winFold acc b = acc + if 0 == (defenders b) then 1 else 0
