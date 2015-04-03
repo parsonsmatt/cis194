@@ -30,6 +30,7 @@ type Army = Int
 data Battlefield = Battlefield { attackers :: Army, defenders :: Army }
     deriving Show
 
+-- Exercise #1:
 
 battle :: Battlefield -> Rand StdGen Battlefield
 battle bf = do 
@@ -49,3 +50,12 @@ battle bf = do
 
 roll :: Int -> Rand StdGen [DieValue]
 roll n = replicateM n die
+
+-- Exercise #2:
+
+invade :: Battlefield -> Rand StdGen Battlefield
+invade bf = do
+    newBf <- battle bf
+    if attackers newBf > 2 && defenders newBf > 0  
+       then invade newBf
+       else return newBf
