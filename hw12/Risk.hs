@@ -4,7 +4,7 @@ module Risk where
 
 import Control.Monad.Random
 import Control.Monad
-import Data.List (sort, foldl')
+import Data.List (sort, foldr)
 import Data.Ratio
 
 ------------------------------------------------------------
@@ -64,10 +64,6 @@ invade bf = do
 successProb :: Battlefield -> Rand StdGen Double
 successProb bf = do
     battlefields <- replicateM 1000 (invade bf) 
-    let wins = foldr winFold 1 battlefields
-    return $ fromRational wins
-
-winFold :: (Integral a) => Battlefield -> Ratio a -> Ratio a
-winFold bf ratio = if 0 == (defenders bf)
-                      then (numerator ratio + 1) % (denominator ratio)
-                      else (numerator ratio) % (denominator ratio + 1)
+    let wins    = foldr (\b acc -> acc + if (0 == defenders b) then 1 else 0) 0 battlefields
+        battles = length battlefields
+    return $ (wins / fromIntegral battles)
