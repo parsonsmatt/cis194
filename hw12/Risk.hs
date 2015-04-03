@@ -5,6 +5,7 @@ module Risk where
 import Control.Monad.Random
 import Control.Monad
 import Data.List (sort, foldl')
+import Data.Ratio
 
 ------------------------------------------------------------
 -- Die values
@@ -34,8 +35,8 @@ data Battlefield = Battlefield { attackers :: Army, defenders :: Army }
 
 battle :: Battlefield -> Rand StdGen Battlefield
 battle bf = do 
-    atkDice <- (roll attackForce)
-    defDice <- (roll defenseForce)
+    atkDice <- roll attackForce
+    defDice <- roll defenseForce
     let lineUp = zip (sort atkDice) (sort defDice)
         winners = map (uncurry (>)) lineUp
         defenseLost = length $ filter id  winners
@@ -44,7 +45,7 @@ battle bf = do
     where 
       atk = attackers bf
       def = defenders bf
-      attackForce  = if atk > 4 then 3 else min (atk - 1) 3
+      attackForce  = if atk > 3 then 3 else min (atk - 1) 3
       defenseForce = if def > 2 then 2 else def
       roll n = replicateM n die
 
@@ -62,8 +63,11 @@ invade bf = do
 
 successProb :: Battlefield -> Rand StdGen Double
 successProb bf = do
-    battlefields <- mapM invade (replicate 1000 bf) 
-    let wins = foldl' winFold  0 battlefields
-    return ((fromIntegral wins) / (fromIntegral . length) battlefields)
-    where 
-        winFold acc b = acc + if 0 == (defenders b) then 1 else 0
+    battlefields <- replicateM 1000 (invade bf) 
+    let wins = foldr winFold 1 battlefields
+    return $ fromRational wins
+
+winFold :: (Integral a) => Battlefield -> Ratio a -> Ratio a
+winFold bf ratio = if 0 == (defenders bf)
+                      then (numerator ratio + 1) % (denominator ratio)
+                      else (numerator ratio) % (denominator ratio + 1)
